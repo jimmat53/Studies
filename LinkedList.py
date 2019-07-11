@@ -1,5 +1,8 @@
 """Singly LinkedList."""
 
+class LinkedListException(Exception):
+  pass
+
 
 class Node:
   """A node of a singly linked list."""
@@ -8,6 +11,9 @@ class Node:
     """Node constructor."""
     self.data = data
     self.next = None
+
+  def __repr__(self):
+    return 'Data:{}, Next:{}'.format(str(self.data), str(self.next))
 
 
 class LinkedList():
@@ -61,12 +67,48 @@ class LinkedList():
 
   def search(self, ele):
     """Search for an element in the Linkedlist."""
+    current = self.head
+    while current:
+      if current.data == ele:
+        return True
+      current = current.next
+    return False
 
   def insert_middle(self, ele, position):
     """Insert an element at the nth position in the Linkedlist."""
+    if position > self.length() -1:
+      raise LinkedListException
+    else:
+      current = self.head
+      prev = self.head
+      counter = 0
+      while current and counter < position:
+        counter += 1
+        prev = current
+        current = current.next
+      new_node = Node(ele)
+      new_node.next = current
+      if counter == 0:
+        self.head = new_node
+      else:
+        prev.next = new_node
 
   def remove_nth_element(self, position):
     """Remove an element at the nth position in the Linkedlist."""
+    if position > self.length() -1:
+      raise LinkedListException
+    else:
+      current = self.head
+      prev = self.head
+      counter = 0
+      while current and counter < position:
+        counter += 1
+        prev = current
+        current = current.next
+      if counter == 0:
+        self.head = current.next
+      else:
+        prev.next = current.next
 
   def length(self):
     """Find the length of the Linkedlist."""
@@ -77,12 +119,33 @@ class LinkedList():
       current = current.next
     return count
     
+  def return_last_node(self):
+    """Return the last node of the list."""
+    current = self.head
+    while current:
+      prev = current
+      current = current.next
+    return prev
 
   def copy_list(self):
     """Return a copy of the Linkedlist object ."""
+    LIST_COPY = LinkedList()
+    current = self.head
+    while current:
+      LIST_COPY.append(current.data)
+      current = current.next
+    return LIST_COPY
 
   def detect_loop(self):
     """Detect cycles in Linkedlist."""
+    tortoise = self.head
+    hare = self.head
+    while hare:
+      tortoise = tortoise.next
+      hare = hare.next.next
+      if tortoise == hare:
+        return True
+    return False
 
   def sort(self):
     """Sort the Linkedlist."""
@@ -90,9 +153,9 @@ class LinkedList():
   def sum(self, list_1, list_2):
     """Sum of 2 Linkedlists."""
 
-  def concatenate_sorted_lists(self, list_1, list_2):
+  @staticmethod
+  def concatenate_sorted_lists(list1, list2):
     """Concatenate 2 sorted Linkedlists."""
-
 
 if __name__ == "__main__":
   LIST_ONE = LinkedList()
@@ -106,11 +169,51 @@ if __name__ == "__main__":
   LIST_ONE.reverse_list()
   print('Reversed Linked List=>')
   LIST_ONE.print_list(LIST_ONE.head)
+  LIST_ONE.reverse_list()
     
   print('Delete an element from Linked List=>')
   LIST_ONE.delete(3)
   LIST_ONE.delete(1)
+  print('Linked List=>')
   LIST_ONE.print_list(LIST_ONE.head)
 
   print('Length of the Linked List=>')
   print(LIST_ONE.length())
+
+  print('If element is present=>')
+  print(LIST_ONE.search(2))
+  print(LIST_ONE.search(100))
+  
+  print('Insert in the middle of the Linked List=>')
+  LIST_ONE.insert_middle(0, 0)
+  LIST_ONE.insert_middle(1, 1)
+  LIST_ONE.insert_middle(3, 3)
+  print('Linked List=>')
+  LIST_ONE.print_list(LIST_ONE.head)
+
+  try:
+    LIST_ONE.insert_middle(100, 100)
+  except LinkedListException:
+    print('Invalid position')
+
+  print('Removing element-4 from Linked List=>')
+  LIST_ONE.remove_nth_element(4)
+  LIST_ONE.print_list(LIST_ONE.head)
+  print('Removing element-2 from Linked List=>')
+  LIST_ONE.remove_nth_element(2)
+  LIST_ONE.print_list(LIST_ONE.head)
+  print('Removing element-0 from Linked List=>')
+  LIST_ONE.remove_nth_element(0)
+  LIST_ONE.print_list(LIST_ONE.head)
+    
+  print('Copy of a Linked List')
+  LIST_TWO = LIST_ONE.copy_list()
+  LIST_TWO.print_list(LIST_TWO.head)
+
+  # Building a List with cycle to see f we can detect a cycle.
+  LIST_THREE = LIST_ONE.copy_list()
+  last_node = LIST_THREE.return_last_node()
+  LIST_THREE.print_list(LIST_THREE.head)
+  print('Detect a cycle: {}'.format(LIST_THREE.detect_loop()))
+  last_node.next = LIST_THREE.head
+  print('Detect a cycle: {}'.format(LIST_THREE.detect_loop()))
