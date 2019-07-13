@@ -147,15 +147,6 @@ class LinkedList():
         return True
     return False
 
-  def sort(self):
-    """Sort the Linkedlist."""
-
-  def sum(self, list_1, list_2):
-    """Sum of 2 Linkedlists."""
-
-  @staticmethod
-  def concatenate_sorted_lists(list1, list2):
-    """Concatenate 2 sorted Linkedlists."""
 
 if __name__ == "__main__":
   LIST_ONE = LinkedList()
