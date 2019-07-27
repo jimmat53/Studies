@@ -13,8 +13,7 @@ class Node:
     self.next = None
 
   def __repr__(self):
-    return 'Data:{}, Next:{}'.format(str(self.data), str(self.next))
-
+    return 'Data: {}, Next(ObjID): {}'.format(str(self.data), str(id(self.next)))
 
 class LinkedList():
   """LinkedList data structure and operations on it."""
@@ -76,7 +75,10 @@ class LinkedList():
 
   def insert_middle(self, ele, position):
     """Insert an element at the nth position in the Linkedlist."""
-    if position > self.length() -1:
+    if position == 0 and self.length() == 0:
+      new_node = Node(ele)
+      self.head = new_node
+    elif position > self.length():
       raise LinkedListException
     else:
       current = self.head
@@ -121,11 +123,14 @@ class LinkedList():
     
   def return_last_node(self):
     """Return the last node of the list."""
-    current = self.head
-    while current:
-      prev = current
-      current = current.next
-    return prev
+    if self.head:
+      current = self.head
+      while current:
+        prev = current
+        current = current.next
+      return prev
+    else:
+      return None
 
   def copy_list(self):
     """Return a copy of the Linkedlist object ."""
@@ -142,7 +147,9 @@ class LinkedList():
     hare = self.head
     while hare:
       tortoise = tortoise.next
-      hare = hare.next.next
+      hare = hare.next
+      if hare:
+        hare = hare.next  #Advance twice
       if tortoise == hare:
         return True
     return False
