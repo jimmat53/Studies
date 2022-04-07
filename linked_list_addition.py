@@ -84,7 +84,15 @@ class IntegerLinkedList(LinkedList):
 			print("Invalid or empty digits.")
 		for digit in digits:
 			self.append(digit)
-	
+
+	def __int__(self):
+		traverse_node = self.start_ptr
+		result = ''
+		while(traverse_node):
+			result = result + str(traverse_node.value)
+			traverse_node = traverse_node.next
+		return int(result)
+			
 	def __add__(self, second):
 		''' Add 2 integer linked lists. '''
 		x = copy.deepcopy(self)
